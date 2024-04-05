@@ -1,18 +1,27 @@
 {
-  "name": "react-paravirtual-scroll",
-  "module": "index.ts",
-  "type": "module",
-  "devDependencies": {
-    "@types/bun": "latest",
-    "@types/react": "^18.2.74",
-    "@types/react-dom": "^18.2.24",
-    "vite": "^5.2.8"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  }
+	"name": "react-paravirtual-scroll",
+	"main": "dist/index.cjs",
+	"module": "dist/index.js",
+	"types": "./dist/index.d.ts",
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"build": "bun run --bun vite --config=vite.config.mts build",
+		"dev": "bun run --bun vite --config=vite.config.mts",
+		"test": "bun run vitest --config=vite.config.mts"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.6.4",
+		"@types/bun": "latest",
+		"@types/react": "^18.2.74",
+		"@types/react-dom": "^18.2.24",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"vite": "^5.2.8",
+		"vite-plugin-dts": "^3.8.1",
+		"vitest": "^1.4.0"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	}
 }

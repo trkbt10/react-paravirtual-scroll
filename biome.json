@@ -1,0 +1,24 @@
+
+{
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "all": true,
+      "nursery": {
+        "recommended": true
+      },
+      "style": {
+        "all": false
+      },
+      "complexity": {
+        "all": false
+      }
+    }
+  },
+  "formatter": {
+    "enabled": true
+  },
+  "files": {
+    "ignoreUnknown": true
+  }
+}
