@@ -1,6 +1,6 @@
 import * as React from "react";
 import type { ParavirtualListProps } from "./types";
-import { List } from "./List";
+import { VariableSizeList } from "./List";
 type Item = {
 	id: number;
 	name: string;
@@ -28,17 +28,17 @@ export function App(props: React.PropsWithChildren<{}>) {
 	}, []);
 
 	return (
-		<List<Item>
+		<VariableSizeList<Item[]>
 			itemSizeRecord={itemSizeRecord}
 			totalHeight={totalHeight}
 			totalCount={variableHeightItems.length}
-			items={variableHeightItems}
+			data={variableHeightItems}
 		>
 			{renderItem}
-		</List>
+		</VariableSizeList>
 	);
 }
-const renderItem: ParavirtualListProps<Item>["children"] = (
+const renderItem: ParavirtualListProps<Item[]>["children"] = (
 	{ style, data },
 	index,
 ) => {
@@ -58,7 +58,7 @@ const renderItem: ParavirtualListProps<Item>["children"] = (
 			}}
 		>
 			{index}
-			{data.name}
+			{data[index].name}
 		</div>
 	);
 };

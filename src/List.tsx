@@ -2,7 +2,11 @@ import * as React from "react";
 import { useMeasure } from "./useMeasure";
 import { estimateIndexRange } from "./estimateIndexRange";
 import { useScrollValue } from "./useScrollValue";
-import type { ParavirtualListProps } from "./types";
+import type {
+	FixedSizeListProps,
+	ParavirtualListProps,
+	VariableSizeListProps,
+} from "./types";
 const measurementElementStyle: React.CSSProperties = {
 	position: "fixed",
 	top: 0,
@@ -15,16 +19,34 @@ const measurementElementStyle: React.CSSProperties = {
 	display: "content",
 	zIndex: -1,
 };
-export const List: <T>(props: ParavirtualListProps<T>) => React.ReactNode = ({
+export const FixedSizeList: <T>(
+	props: FixedSizeListProps<T>,
+) => React.ReactNode = (props) => {
+	const itemSizeRecord = React.useMemo(() => {
+		return new Proxy(
+			{},
+			{
+				get: () => {
+					return props.itemSize;
+				},
+			},
+		);
+	}, [props.itemSize]);
+	return <VariableSizeList {...props} itemSizeRecord={itemSizeRecord} />;
+};
+export const VariableSizeList: <T>(
+	props: VariableSizeListProps<T>,
+) => React.ReactNode = ({
 	itemSizeRecord,
 	children,
 	initialScrollOffset,
 	totalCount,
 	totalHeight,
 	overscanCount,
-	items,
 	direction,
 	scrollContainer,
+	data,
+	onItemsRendered,
 }) => {
 	const { scrollValueX, scrollValueY } = useScrollValue(scrollContainer);
 	const scrollValue =
@@ -59,7 +81,12 @@ export const List: <T>(props: ParavirtualListProps<T>) => React.ReactNode = ({
 
 		return result;
 	}, [totalCount, itemSizeRecord]);
-
+	const [renderedItems, setRenderedItems] = React.useState<{
+		overscanStartIndex: number;
+		overscanEndIndex: number;
+		visibleStartIndex: number;
+		visibleEndIndex: number;
+	}>();
 	React.useEffect(() => {
 		if (!bound) {
 			return;
@@ -67,13 +94,16 @@ export const List: <T>(props: ParavirtualListProps<T>) => React.ReactNode = ({
 		const indexRange = estimateIndexRange({
 			totalCount,
 			itemScrollYMap,
-			scrollValue: scrollValue,
+			scrollValue,
 			bound,
 			overscanCount: overscanCount ?? 0,
 		});
 		const {
 			overscanStartIndex,
 			overscanTranslateY,
+			visibleStartIndex,
+			visibleEndIndex,
+			overscanEndIndex,
 			renderItemCount,
 			visibleStartY,
 		} = indexRange;
@@ -110,7 +140,12 @@ export const List: <T>(props: ParavirtualListProps<T>) => React.ReactNode = ({
 				index: item.index,
 			};
 		});
-
+		setRenderedItems({
+			overscanStartIndex,
+			overscanEndIndex,
+			visibleStartIndex,
+			visibleEndIndex,
+		});
 		setRenderItems(displayItems);
 	}, [
 		scrollValue,
@@ -120,6 +155,12 @@ export const List: <T>(props: ParavirtualListProps<T>) => React.ReactNode = ({
 		bound,
 		itemScrollYMap,
 	]);
+	React.useEffect(() => {
+		if (!onItemsRendered || !renderedItems) {
+			return;
+		}
+		onItemsRendered(renderedItems);
+	}, [renderedItems, onItemsRendered]);
 	return (
 		<>
 			{/* Scroll height reserve element */}
@@ -133,7 +174,6 @@ export const List: <T>(props: ParavirtualListProps<T>) => React.ReactNode = ({
 			></div>
 			<div ref={ref} style={measurementElementStyle}></div>
 			{renderItems.map((item) => {
-				const data = items[item.index];
 				return (
 					<React.Fragment key={item.index}>
 						{children(
@@ -146,7 +186,6 @@ export const List: <T>(props: ParavirtualListProps<T>) => React.ReactNode = ({
 									height: item.size,
 								},
 								data,
-								items,
 							},
 							item.index,
 						)}

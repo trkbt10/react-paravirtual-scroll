@@ -1,4 +1,4 @@
-import { binarySearch } from "./binarySearch";
+import { binarySearch, heuristicBinarySearch } from "./binarySearch";
 
 type EstimateIndexRangeParams = {
 	totalCount: number;
@@ -17,9 +17,15 @@ export function getStartPositionStatus({
 	EstimateIndexRangeParams,
 	"scrollValue" | "totalCount" | "itemScrollYMap"
 >) {
+	const heuristicRatio = scrollValue / itemScrollYMap[totalCount - 1];
 	const visibleStartIndex = Math.max(
 		0,
-		binarySearch(totalCount, scrollValue, itemScrollYMap) - 1,
+		heuristicBinarySearch(
+			totalCount,
+			scrollValue,
+			heuristicRatio,
+			itemScrollYMap,
+		) - 1,
 	);
 	const visibleStart = itemScrollYMap[visibleStartIndex];
 	return {
@@ -42,9 +48,11 @@ export function getEndPositionStatus({
 }) {
 	const gap = scrollValue - visibleStart;
 	const displayHeight = bound.height + gap;
-	const visibleEndIndex = binarySearch(
+	const heuristicRatio = displayHeight / bound.height;
+	const visibleEndIndex = heuristicBinarySearch(
 		totalCount,
 		visibleStart + displayHeight,
+		heuristicRatio,
 		itemScrollYMap,
 	);
 	const visibleHeight = itemScrollYMap[visibleEndIndex] - visibleStart;
