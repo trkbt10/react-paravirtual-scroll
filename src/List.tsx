@@ -22,7 +22,7 @@ export const FixedSizeList: <T>(
 	const itemSizeRecord = React.useMemo(() => {
 		return new Proxy({} as { [index: string]: number }, {
 			get: (target, p, receiver) => {
-				if (typeof p !== "string") {
+				if (typeof p !== "string" || typeof p !== "number") {
 					return Reflect.get(target, p, receiver);
 				}
 				const index = parseInt(p, 10);
