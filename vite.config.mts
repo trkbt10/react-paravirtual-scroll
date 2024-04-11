@@ -9,10 +9,11 @@ const testConfig = defineTestConfig({
 export default mergeConfig(
 	defineConfig({
 		build: {
+			minify: true,
 			lib: {
 				entry: "src/index.tsx",
 				formats: ["es", "cjs"],
-				fileName: (format) => `index.${format === "cjs" ? "cjs" : "js"}`,
+				fileName: (format) => `[name].${format === "cjs" ? "cjs" : "js"}`,
 			},
 			rollupOptions: {
 				external: ["react-dom", /^react\/.+/, "react"],
