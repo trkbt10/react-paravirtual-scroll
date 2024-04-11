@@ -1,4 +1,4 @@
-import { binarySearch, heuristicBinarySearch } from "./binarySearch";
+import { heuristicBinarySearch } from "./binarySearch";
 
 type EstimateIndexRangeParams = {
 	totalCount: number;
