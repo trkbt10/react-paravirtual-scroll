@@ -6,6 +6,7 @@
 	"main": "dist/index.cjs",
 	"module": "dist/index.js",
 	"scripts": {
+		"lint": "biome lint ./src",
 		"build": "bun run --bun vite --config=vite.config.mts build",
 		"dev": "bun run --bun vite --config=vite.config.mts",
 		"test": "bun run vitest --config=vite.config.mts"
