@@ -20,14 +20,18 @@ export const FixedSizeList: <T>(
 	props: FixedSizeListProps<T>,
 ) => React.ReactNode = (props) => {
 	const itemSizeRecord = React.useMemo(() => {
-		return new Proxy(
-			{},
-			{
-				get: () => {
-					return props.itemSize;
-				},
+		return new Proxy({} as { [index: string]: number }, {
+			get: (target, p, receiver) => {
+				if (typeof p !== "string") {
+					return Reflect.get(target, p, receiver);
+				}
+				const index = parseInt(p, 10);
+				if (index < 0) {
+					return 0;
+				}
+				return props.itemSize;
 			},
-		);
+		});
 	}, [props.itemSize]);
 	const totalHeight = React.useMemo(() => {
 		return props.totalCount * props.itemSize;
@@ -105,7 +109,6 @@ export const VariableSizeList: <T>(
 			index: number;
 		}[]
 	>([]);
-
 	const itemScrollYMap = React.useMemo(() => {
 		const result = {} as { [index: string]: number };
 		for (let index = 0; index < totalCount; index++) {
@@ -205,8 +208,15 @@ export const VariableSizeList: <T>(
 					pointerEvents: "none",
 					display: "content",
 				}}
+				aria-hidden="true"
+				role="presentation"
 			></div>
-			<div ref={ref} style={measurementElementStyle}></div>
+			<div
+				ref={ref}
+				style={measurementElementStyle}
+				aria-hidden="true"
+				role="presentation"
+			></div>
 			{renderItems.map((item) => {
 				return (
 					<React.Fragment key={item.index}>
