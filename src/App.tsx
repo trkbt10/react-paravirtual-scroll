@@ -13,7 +13,7 @@ const variableHeightItems: Item[] = Array.from({ length: 1000 }, (_, index) => {
 		height: 50 + 25 * Math.sin((index / 25) * (2 * Math.PI)),
 	};
 });
-export function App(props: React.PropsWithChildren<{}>) {
+export function App() {
 	const totalHeight = React.useMemo(() => {
 		return variableHeightItems.reduce((acc, item) => {
 			return acc + item.height;

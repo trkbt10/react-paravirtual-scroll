@@ -29,7 +29,7 @@ export function useScrollValue(ref?: React.RefObject<HTMLElement>) {
 		}
 
 		// Update the scroll value when the scroll event is fired
-		const handleScroll = (e: Event) => {
+		const handleScroll = () => {
 			startTransition(() => {
 				// Clear the timeout
 				if (scrollTimeout.current) {
