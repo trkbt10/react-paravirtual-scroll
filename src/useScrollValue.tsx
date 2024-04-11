@@ -20,6 +20,8 @@ export function useScrollValue(ref?: React.RefObject<HTMLElement>) {
 		}
 		return window.scrollY;
 	});
+	const [scrolling, setScrolling] = React.useState(false);
+	const scrollTimeout = React.useRef<NodeJS.Timeout | null>(null);
 	React.useEffect(() => {
 		const target = ref?.current || window;
 		if (typeof target === "undefined") {
@@ -27,8 +29,16 @@ export function useScrollValue(ref?: React.RefObject<HTMLElement>) {
 		}
 
 		// Update the scroll value when the scroll event is fired
-		const handleScroll = () => {
+		const handleScroll = (e: Event) => {
 			startTransition(() => {
+				// Clear the timeout
+				if (scrollTimeout.current) {
+					clearTimeout(scrollTimeout.current);
+				}
+				scrollTimeout.current = setTimeout(() => {
+					setScrolling(false);
+				});
+				setScrolling(true);
 				if (ref && ref.current) {
 					setScrollValueX(ref.current.scrollLeft);
 					setScrollValueY(ref.current.scrollTop);
@@ -38,10 +48,11 @@ export function useScrollValue(ref?: React.RefObject<HTMLElement>) {
 				}
 			});
 		};
+
 		target.addEventListener("scroll", handleScroll);
 		return () => {
 			target.removeEventListener("scroll", handleScroll);
 		};
 	}, [ref]);
-	return { scrollValueX, scrollValueY };
+	return { scrollValueX, scrollValueY, pending, scrolling };
 }

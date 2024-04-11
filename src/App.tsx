@@ -6,7 +6,7 @@ type Item = {
 	name: string;
 	height: number;
 };
-const variableHeightItems: Item[] = Array.from({ length: 100 }, (_, index) => {
+const variableHeightItems: Item[] = Array.from({ length: 1000 }, (_, index) => {
 	return {
 		id: index,
 		name: `item-${index}`,

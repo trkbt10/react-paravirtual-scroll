@@ -15,12 +15,12 @@ export type ItemsRenderedParams = {
 };
 export type ParavirtualListProps<T> = {
 	totalCount: number;
-	totalHeight: number;
 	direction?: "ltr" | "rtl" | "ttb" | "btt";
 	children: RenderItem<T>;
 	onItemsRendered?: (params: ItemsRenderedParams) => void;
 	initialScrollOffset?: number;
 	data: T;
+	scrollRestoration?: "auto" | "manual";
 	overscanCount?: number;
 	scrollContainer?: React.RefObject<HTMLElement>;
 };
@@ -28,6 +28,7 @@ export type VariableSizeListProps<T> = ParavirtualListProps<T> & {
 	itemSizeRecord: {
 		[index: string]: number;
 	};
+	totalHeight: number;
 };
 export type FixedSizeListProps<T> = ParavirtualListProps<T> & {
 	itemSize: number;
