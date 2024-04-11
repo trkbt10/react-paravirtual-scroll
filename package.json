@@ -1,15 +1,14 @@
 {
 	"name": "react-paravirtual-scroll",
 	"version": "0.1.0",
-	"type": "module",
+	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
-	"main": "dist/index.cjs",
-	"module": "dist/index.js",
+	"module": "./dist/index.mjs",
 	"scripts": {
 		"lint": "biome lint ./src",
-		"build": "bun run vite --config=vite.config.mts build",
-		"dev": "bun run --bun vite --config=vite.config.mts",
-		"test": "bun run vitest --config=vite.config.mts"
+		"build": "vite --config=vite.config.mts build",
+		"dev": "vite --config=vite.config.mts",
+		"test": "vitest --config=vite.config.mts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.6.4",
@@ -24,7 +23,6 @@
 	},
 	"peerDependencies": {
 		"typescript": "^5.0.0",
-		"react": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0",
-		"react-dom": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0"
+		"react": ">16.0.0"
 	}
 }
