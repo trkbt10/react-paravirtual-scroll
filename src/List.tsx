@@ -71,6 +71,9 @@ export const VariableSizeList: <T>(
 		if (scrollRestoration !== "manual") {
 			return;
 		}
+		if (typeof window === "undefined") {
+			return;
+		}
 		const lastScrollPosition = sessionStorage.getItem(key);
 		window.scrollTo(0, lastScrollPosition ? parseInt(lastScrollPosition) : 0);
 		setScrollPositionRestored(true);

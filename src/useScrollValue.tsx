@@ -23,6 +23,9 @@ export function useScrollValue(ref?: React.RefObject<HTMLElement>) {
 	const [scrolling, setScrolling] = React.useState(false);
 	const scrollTimeout = React.useRef<NodeJS.Timeout | null>(null);
 	React.useEffect(() => {
+		if (typeof window === "undefined") {
+			return;
+		}
 		const target = ref?.current || window;
 		if (typeof target === "undefined") {
 			return;

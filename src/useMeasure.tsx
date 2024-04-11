@@ -3,6 +3,9 @@ import * as React from "react";
 export const useMeasure = (ref: React.RefObject<HTMLElement>) => {
 	const [bound, setBound] = React.useState<DOMRect | null>(null);
 	React.useEffect(() => {
+		if (typeof window === "undefined") {
+			return;
+		}
 		const target = ref.current;
 		if (!target) {
 			return;
