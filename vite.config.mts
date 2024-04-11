@@ -15,12 +15,13 @@ export default mergeConfig(
 				fileName: (format) => `index.${format === "cjs" ? "cjs" : "js"}`,
 			},
 			rollupOptions: {
-				external: ["react-dom", /^react\/.+/],
+				external: ["react-dom", /^react\/.+/, "react"],
 			},
 		},
 		plugins: [
 			dts({
 				entryRoot: "src",
+				include: "src/**/*",
 				insertTypesEntry: false,
 				outDir: "dist",
 			}),
