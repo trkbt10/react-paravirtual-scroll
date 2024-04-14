@@ -44,7 +44,6 @@ export const FixedSizeList: <T>(
 		/>
 	);
 };
-const key = "__scroll_top";
 export const VariableSizeList: <T>(
 	props: VariableSizeListProps<T>,
 ) => React.ReactNode = ({
@@ -59,6 +58,7 @@ export const VariableSizeList: <T>(
 	data,
 	onItemsRendered,
 	scrollRestoration,
+	scrollPositionRestoreKey,
 }) => {
 	const { scrollValueX, scrollValueY, scrolling } =
 		useScrollValue(scrollContainer);
@@ -67,19 +67,20 @@ export const VariableSizeList: <T>(
 	const ref = React.useRef<HTMLDivElement>(null);
 	const [scrollPositionRestored, setScrollPositionRestored] =
 		React.useState(false);
+
 	React.useEffect(() => {
-		if (scrollRestoration !== "manual") {
+		if (scrollRestoration !== "manual" || !scrollPositionRestoreKey) {
 			return;
 		}
 		if (typeof window === "undefined") {
 			return;
 		}
-		const lastScrollPosition = sessionStorage.getItem(key);
+		const lastScrollPosition = sessionStorage.getItem(scrollPositionRestoreKey);
 		window.scrollTo(0, lastScrollPosition ? parseInt(lastScrollPosition) : 0);
 		setScrollPositionRestored(true);
-	}, [scrollRestoration]);
+	}, [scrollRestoration, scrollPositionRestoreKey]);
 	React.useEffect(() => {
-		if (typeof window === "undefined") {
+		if (typeof window === "undefined" || !scrollPositionRestoreKey) {
 			return;
 		}
 		if (!scrollPositionRestored) {
@@ -91,8 +92,14 @@ export const VariableSizeList: <T>(
 		if (scrolling) {
 			return;
 		}
-		sessionStorage.setItem(key, scrollValue.toString());
-	}, [scrollPositionRestored, scrollValue, scrollRestoration, scrolling]);
+		sessionStorage.setItem(scrollPositionRestoreKey, scrollValue.toString());
+	}, [
+		scrollPositionRestored,
+		scrollValue,
+		scrollRestoration,
+		scrolling,
+		scrollPositionRestoreKey,
+	]);
 	React.useEffect(() => {
 		if (typeof window === "undefined") {
 			return;

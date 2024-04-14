@@ -23,6 +23,7 @@ export type ParavirtualListProps<T> = {
 	scrollRestoration?: "auto" | "manual";
 	overscanCount?: number;
 	scrollContainer?: React.RefObject<HTMLElement>;
+	scrollPositionRestoreKey?: string;
 };
 export type VariableSizeListProps<T> = ParavirtualListProps<T> & {
 	itemSizeRecord: {
